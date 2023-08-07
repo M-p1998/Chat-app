@@ -37,8 +37,8 @@ const Homepage = (props) => {
             <button>Send Message</button>
         </form>
         {
-            messages.map((message) =>(
-                <div>{message.username} Says: {message.message} </div>
+            messages.map((message, index) =>(
+                <div key={index} >{message.username} Says: {message.message} </div>
             ))
         }
     </div>
