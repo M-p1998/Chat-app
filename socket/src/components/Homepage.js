@@ -111,8 +111,41 @@ const Homepage = (props) => {
   const sendMessage = (e) => {
     e.preventDefault();
     socket.emit('send-message', { message: input, username: username });
+    setInput('');
   };
 
+
+  // return (
+  //   <div>
+  //     <h2>Users in the chat</h2>
+  //     {users.map((user) => (
+  //       <p key={user.id}>username: {user.username}</p>
+  //     ))}
+  //     {chatFullMessage && <p>{chatFullMessage}</p>}
+  //     {users.length === 2 && !chatFullMessage && (
+  //       <form onSubmit={sendMessage}>
+  //         <label>Message</label>
+  //         <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
+  //         <button>Send Message</button>
+  //       </form>
+  //     )}
+  //     {users.map((user) => (
+  //       <div key={user.id}>
+  //         <h3>Conversation with {user.username}</h3>
+  //         {userMessages[user.id] &&
+  //           userMessages[user.id].map((message, index) => (
+  //             <div key={index}>
+  //               {message.username} Says: {message.message}
+  //             </div>
+  //           ))}
+  //       </div>
+  //     ))}
+
+
+  //   </div>
+  // );
+
+  
 
   return (
     <div>
@@ -121,26 +154,41 @@ const Homepage = (props) => {
         <p key={user.id}>username: {user.username}</p>
       ))}
       {chatFullMessage && <p>{chatFullMessage}</p>}
-      {users.length === 2 && !chatFullMessage && (
+      {/* {users.length === 2 && !chatFullMessage && ( */}
         <form onSubmit={sendMessage}>
           <label>Message</label>
           <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
           <button>Send Message</button>
         </form>
+      {/* )} */}
+      {users.length === 2 && !chatFullMessage && (
+        <div>
+          <h3>Conversation between {users[0].username} and {users[1].username}</h3>
+          <div className="conversation">
+            {userMessages[users[0].id] && userMessages[users[1].id] && (
+              userMessages[users[0].id].map((message, index) => (
+                <div  className={`message ${message.userId === users[0].id ? 'self' : 'other'}`} key={index}>
+                  {message.username} says: {message.message}
+                </div>
+              )).concat(
+                userMessages[users[1].id]&&
+                userMessages[users[0].id] &&
+                userMessages[users[1].id].map((message, index) => (
+                  <div className={`message ${message.userId === users[1].id ? 'self' : 'other'}`} key={index}>
+                    {message.username} says: {message.message}
+                  </div>
+                ))
+              )
+            )}
+          </div>
+          </div>
       )}
-      {users.map((user) => (
-        <div key={user.id}>
-          <h3>Conversation with {user.username}</h3>
-          {userMessages[user.id] &&
-            userMessages[user.id].map((message, index) => (
-              <div key={index}>
-                {message.username} Says: {message.message}
-              </div>
-            ))}
-        </div>
-      ))}
     </div>
   );
+
+
+
+
 };
 
 export default Homepage;
